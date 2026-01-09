@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit | Habit Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --accent-fire: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .date-display { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Streak Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover { transform: translateY(-2px); }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Specific styles for streak types */
+        .stat-card.fire .stat-value { color: var(--accent-fire); }
+        .stat-card.gold .stat-value { color: var(--primary); }
+
+        .icon { font-size: 1.5rem; }
+
+        /* Habit List */
+        .habit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .habit-item {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .habit-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary-glow);
+        }
+
+        .habit-info { display: flex; flex-direction: column; gap: 0.2rem; }
+        .habit-name { font-weight: 500; }
+        .habit-streak { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Checkbox Customization */
+        .checkbox-wrapper {
+            position: relative;
+            width: 28px;
+            height: 28px;
+        }
+
+        .custom-checkbox {
+            appearance: none;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            display: grid;
+            place-content: center;
+        }
+
+        .custom-checkbox::before {
+            content: "L"; /* Simple check shape using text/transform or SVG */
+            content: "";
+            width: 10px;
+            height: 6px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg) scale(0);
+            transition: transform 0.2s ease;
+            margin-top: -2px;
+        }
+
+        .custom-checkbox:checked {
+            background-color: var(--success);
+            border-color: var(--success);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .custom-checkbox:checked::before {
+            transform: rotate(-45deg) scale(1);
+        }
+
+        /* Completed State for text */
+        .habit-item.completed .habit-name {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        /* Floating Add Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .fab:hover { transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div>
+                <h1>Orbit Tracker</h1>
+                <div class="date-display" id="currentDate"></div>
+            </div>
+            <div style="width: 40px; height: 40px; background: #334155; border-radius: 50%;"></div> </header>
+
+        <div class="stats-grid">
+            <div class="stat-card fire">
+                <h3>Current Streak</h3>
+                <div class="stat-value">
+                    <span id="currentStreak">12</span>
+                    <span class="icon">🔥</span>
+                </div>
+            </div>
+            <div class="stat-card gold">
+                <h3>Longest Streak</h3>
+                <div class="stat-value">
+                    <span id="longestStreak">45</span>
+                    <span class="icon">🏆</span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-title">Today's Habits</div>
+            <div class="habit-list" id="habitList">
+                </div>
+        </div>
+    </div>
+
+    <button class="fab">+</button>
+
+    <script>
+        // 1. Mock Data
+        const habits = [
+            { id: 1, name: "Drink 3L Water", currentStreak: 12, completed: false },
+            { id: 2, name: "Read 30 mins", currentStreak: 5, completed: true },
+            { id: 3, name: "Workout", currentStreak: 3, completed: false },
+            { id: 4, name: "Code Project", currentStreak: 24, completed: false }
+        ];
+
+        // 2. Global State for Dashboard
+        const appState = {
+            totalCurrentStreak: 12, // Calculated logic would go here in real app
+            longestStreak: 45
+        };
+
+        // 3. Render Date
+        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', dateOptions);
+
+        // 4. Render Functions
+        function renderHabits() {
+            const listContainer = document.getElementById('habitList');
+            listContainer.innerHTML = '';
+
+            habits.forEach(habit => {
+                const item = document.createElement('div');
+                item.className = `habit-item ${habit.completed ? 'completed' : ''}`;
+                item.onclick = (e) => toggleHabit(habit.id, e);
+
+                item.innerHTML = `
+                    <div class="habit-info">
+                        <span class="habit-name">${habit.name}</span>
+                        <span class="habit-streak">🔥 ${habit.currentStreak} day streak</span>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="custom-checkbox" 
+                            ${habit.completed ? 'checked' : ''}>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // 5. Logic
+        function toggleHabit(id, event) {
+            // Prevent toggling if they clicked the container but not strictly necessary for UX
+            // Find habit and toggle
+            const habit = habits.find(h => h.id === id);
+            if (habit) {
+                habit.completed = !habit.completed;
+                
+                // Visual feedback: Update specific streak logic here if needed
+                if(habit.completed) {
+                    // Logic to increment global streak could happen here
+                    habit.currentStreak++;
+                } else {
+                    habit.currentStreak--;
+                }
+                
+                renderHabits();
+                updateDashboard();
+            }
+        }
+
+        function updateDashboard() {
+            // Update the big numbers based on active habits (Mock logic)
+            // In a real app, this would recalculate based on aggregate data
+            document.getElementById('currentStreak').innerText = appState.totalCurrentStreak; 
+        }
+
+        // Initialize
+        renderHabits();
+    </script>
+</body>
+</html>
+
