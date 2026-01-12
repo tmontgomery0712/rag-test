@@ -1,5 +1,6 @@
 package com.example.ragaitest.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,9 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USER")
-public class UserEntity {
-
+@Table(name = "STREAK")
+public class StreakEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GENERATED_KEYS")
     @SequenceGenerator(
@@ -22,10 +22,14 @@ public class UserEntity {
             allocationSize = 1
     )
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private UserEntity user;
+
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StreakEntity> streaks = new ArrayList<>();
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "streak", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StreakCompletionEntity> completions = new ArrayList<>();
 }
