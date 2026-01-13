@@ -1,42 +1,81 @@
-<div
-  class="flex flex-col items-center justify-center w-full lg:w-1/3 mx-auto my-8 px-4">
-  <h2>My Streaks</h2>
+<div class="flex w-full flex-col items-center justify-center p-4 sm:p-6 lg:w-2/3 xl:w-1/2 mx-auto my-8">
+  <h1 class="mat-headline-5 mb-6">My Streaks</h1>
 
+  <!-- Input for new streak -->
   <mat-form-field class="w-full mb-4">
     <mat-label>New Streak Name</mat-label>
-    <input matInput [(ngModel)]="newStreakName" (keyup.enter)="add()">
-    <button mat-icon-button matSuffix (click)="add()" [disabled]="!newStreakName">
+    <input matInput [(ngModel)]="newStreakName" (keyup.enter)="addStreak()">
+    <button mat-icon-button matSuffix (click)="addStreak()" [disabled]="!newStreakName">
       <mat-icon>add</mat-icon>
     </button>
   </mat-form-field>
 
-  <div class="flex flex-col gap-4 w-full">
+  <div class="w-full">
     @for (streak of streaks(); track streak.id) {
-      <div class="bg-gray-700 rounded-lg flex flex-col w-full gap-1 py-3">
-        <!-- ROW 1 -->
-        <div class="flex items-center w-full">
-          <mat-checkbox></mat-checkbox>
-          <span class="ml-3 flex-1">
-          {{ streak.name }}
-        </span>
-          <button mat-icon-button class="ml-2">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" class="ml-1" (click)="delete(streak.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-        <!-- ROW 2 -->
-        <div class="flex items-center text-sm text-gray-600 ml-9 gap-1">
-          <mat-icon class="text-orange-500">local_fire_department</mat-icon>
-          <span>0</span>
-        </div>
-      </div>
+      <mat-card class="w-full mb-4 transition-colors duration-200 hover:bg-white/5">
+        <mat-card-content class="p-4">
+          <div class="flex items-center gap-4">
+            <mat-checkbox
+              [checked]="streak.completed"
+              (change)="toggleCompletion(streak)"
+              [aria-label]="'Complete ' + streak.name + ' for the day'"
+              color="primary">
+            </mat-checkbox>
+
+            <div class="flex-1">
+              @if (editingStreak()?.id === streak.id) {
+                <mat-form-field class="w-full text-base">
+                  <input
+                    matInput
+                    [(ngModel)]="editedName"
+                    (keyup.enter)="update()"
+                    (keyup.escape)="cancelEdit()"
+                  />
+                </mat-form-field>
+              } @else {
+                <span  [class.line-through]="streak.completed"
+                       [class.text-gray-500]="streak.completed"
+                       class="mat-body-1">
+                  {{ streak.name }}
+                </span>
+              }
+            </div>
+
+            <div class="flex items-center gap-2 text-orange-400">
+              <mat-icon>local_fire_department</mat-icon>
+              <span class="font-bold text-lg">{{ streak.currentStreak }}</span>
+            </div>
+
+            @if (editingStreak()?.id === streak.id) {
+              <button mat-icon-button  (click)="update()" aria-label="Save streak name">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button (click)="cancelEdit()" aria-label="Cancel editing">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            } @else {
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onEditClick(streak)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item class="delete-menu-item" (click)="delete(streak.id)">
+                  <mat-icon class="delete-menu-item">delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
     } @empty {
-      <div class="p-8 text-center text-gray-500">
-        <p>No streaks yet. Start one today!</p>
+      <div class="flex flex-col items-center justify-center p-12 text-center text-gray-500 border-2 border-dashed border-gray-700 rounded-lg">
+        <mat-icon class="!w-16 !h-16 text-4xl mb-4">checklist</mat-icon>
+        <p class="mat-body-1">No streaks yet. Add one above to get started!</p>
       </div>
     }
   </div>
-
 </div>

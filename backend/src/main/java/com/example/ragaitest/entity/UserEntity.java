@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class UserEntity {
 
     @Id
@@ -22,6 +22,7 @@ public class UserEntity {
             allocationSize = 1
     )
     private Long id;
+
     @Column(name = "NAME", nullable = false)
     private String name;
 
