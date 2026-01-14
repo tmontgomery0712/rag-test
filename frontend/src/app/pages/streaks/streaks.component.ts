@@ -52,7 +52,7 @@ export class StreaksComponent implements OnInit {
     const newStreak: Streak = {
       id: Date.now(),
       name: this.newStreakName.trim(),
-      completed: false,
+      completedToday: false,
       currentStreak: 0,
       longestStreak: 0
     };
@@ -71,7 +71,7 @@ export class StreaksComponent implements OnInit {
   }
 
   toggleCompletion(streak: Streak) {
-    const isNowCompleted = !streak.completed;
+    const isNowCompleted = !streak.completedToday;
 
     let newStreakCount = isNowCompleted
       ? streak.currentStreak + 1

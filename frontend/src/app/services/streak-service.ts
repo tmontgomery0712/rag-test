@@ -9,7 +9,7 @@ import { Streak } from "../model/streak";
 })
 export class StreakService {
 
-  private baseLocation = 'backend';
+  private baseLocation = '/backend/streaks';
   private http = inject(HttpClient);
   private snackBar = inject(MatSnackBar);
 
@@ -37,27 +37,27 @@ export class StreakService {
     this.streaksSignal.update(current => [...current, newStreak]);
 
     // 2. Persist to Backend
-    // return this.http.post<Streak>(this.baseLocation, newStreak).pipe(
-    //   tap((savedStreak) => {
-    //     // Success: Replace temp object with the one from the server (which may have a real ID)
-    //     this.streaksSignal.update(current =>
-    //       current.map(s => s.id === newStreak.id ? savedStreak : s)
-    //     );
-    //   }),
-    //   catchError((err) => {
-    //     // Rollback on error
-    //     this.streaksSignal.set(previousStreaks);
-    //
-    //     // Notify user
-    //     this.snackBar.open('Failed to save streak. Changes reverted.', 'Close', {
-    //       duration: 3000,
-    //       horizontalPosition: 'end',
-    //       verticalPosition: 'bottom',
-    //     });
-    //
-    //     return throwError(() => err);
-    //   })
-    // ).subscribe();
+    return this.http.post<Streak>(`${this.baseLocation}/add-streak/`, newStreak).pipe(
+      tap((savedStreak) => {
+        // Success: Replace temp object with the one from the server (which may have a real ID)
+        this.streaksSignal.update(current =>
+          current.map(s => s.id === newStreak.id ? savedStreak : s)
+        );
+      }),
+      catchError((err) => {
+        // Rollback on error
+        this.streaksSignal.set(previousStreaks);
+
+        // Notify user
+        this.snackBar.open('Failed to save streak. Changes reverted.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+        });
+
+        return throwError(() => err);
+      })
+    ).subscribe();
   }
 
   deleteStreak(id: number) {

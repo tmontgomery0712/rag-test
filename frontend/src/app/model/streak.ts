@@ -1,8 +1,8 @@
 export interface Streak {
   id: number;
-  userId: number;
+  //userId: number;
   name: string;
-  completed: boolean;
+  completedToday: boolean;
   currentStreak: number;
   longestStreak: number;
 
