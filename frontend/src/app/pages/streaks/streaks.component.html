@@ -1,5 +1,5 @@
-<div class="flex w-full flex-col items-center justify-center p-4 sm:p-6 lg:w-2/3 xl:w-1/2 mx-auto my-8">
-  <h1 class="mat-headline-5 mb-6">My Streaks</h1>
+<div class="page-container">
+  <h1 class="page-title">My Streaks</h1>
 
   <!-- Input for new streak -->
   <mat-form-field class="w-full mb-4">
@@ -12,14 +12,14 @@
 
   <div class="w-full">
     @for (streak of streaks(); track streak.id) {
-      <mat-card class="w-full mb-4 transition-colors duration-200 hover:bg-white/5">
+      <mat-card class="w-full mb-4 streak-card">
         <mat-card-content class="p-4">
           <div class="flex items-center gap-4">
             <mat-checkbox
-              [checked]="streak.completedToday"
-              (change)="toggleCompletion(streak)"
-              [aria-label]="'Complete ' + streak.name + ' for the day'"
-              color="primary">
+                  [checked]="streak.completedToday"
+                  (change)="toggleCompletion(streak)"
+                  [aria-label]="'Complete ' + streak.name + ' for the day'"
+                  color="primary">
             </mat-checkbox>
 
             <div class="flex-1">
@@ -33,15 +33,14 @@
                   />
                 </mat-form-field>
               } @else {
-                <span  [class.line-through]="streak.completedToday"
-                       [class.text-gray-500]="streak.completedToday"
-                       class="mat-body-1">
+                <span  [class.completed-text]="streak.completedToday"
+                       class="streak-name">
                   {{ streak.name }}
                 </span>
               }
             </div>
 
-            <div class="flex items-center gap-2 text-orange-400">
+            <div class="flex items-center gap-2 streak-count">
               <mat-icon>local_fire_department</mat-icon>
               <span class="font-bold text-lg">{{ streak.currentStreak }}</span>
             </div>
@@ -72,8 +71,8 @@
         </mat-card-content>
       </mat-card>
     } @empty {
-      <div class="flex flex-col items-center justify-center p-12 text-center text-gray-500 border-2 border-dashed border-gray-700 rounded-lg">
-        <mat-icon class="!w-16 !h-16 text-4xl mb-4">checklist</mat-icon>
+      <div class="empty-state">
+        <mat-icon class="empty-icon">checklist</mat-icon>
         <p class="mat-body-1">No streaks yet. Add one above to get started!</p>
       </div>
     }

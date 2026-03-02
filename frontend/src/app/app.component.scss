@@ -1,0 +1,10 @@
+.main-content {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 0;
+  transition: padding-top 0.3s ease;
+}
+
+.main-content.with-navbar {
+  padding-top: 64px;
+}

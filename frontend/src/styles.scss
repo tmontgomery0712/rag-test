@@ -1,6 +1,128 @@
 /* You can add global styles to this file, and also import other style files */
+@import './theme-material';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  /* Dark theme (default) */
+  --color-primary: #6DB33F;
+  --color-primary-hover: #5a9a33;
+  --color-background: #1B1F23;
+  --color-surface: #252A30;
+  --color-surface-hover: #2D333B;
+  --color-text: #FAFAFA;
+  --color-text-secondary: #B0B8C1;
+  --color-border: #3A424A;
+  --color-error: #EF5350;
+  --color-success: #66BB6A;
+  --color-warning: #FFA726;
+  
+  /* 508 compliant focus ring */
+  --color-focus: #6DB33F;
+}
+
+[data-theme="light"] {
+  --color-primary: #6DB33F;
+  --color-primary-hover: #5a9a33;
+  --color-background: #FFFFFF;
+  --color-surface: #F5F5F5;
+  --color-surface-hover: #EEEEEE;
+  --color-text: #1B1F23;
+  --color-text-secondary: #5F6368;
+  --color-border: #E0E0E0;
+  --color-error: #D32F2F;
+  --color-success: #388E3C;
+  --color-warning: #F57C00;
+  --color-focus: #6DB33F;
+}
+
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 508 compliant focus styles */
+*:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Touch-friendly tap targets (min 44px) */
+button, 
+a, 
+input, 
+select, 
+textarea,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Ensure inputs have proper contrast */
+input, 
+select, 
+textarea {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* Button base styles */
+button {
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card/surface styles */
+.card {
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+}
+
+/* Text utilities */
+.text-secondary {
+  color: var(--color-text-secondary);
+}

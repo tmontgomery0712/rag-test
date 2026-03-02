@@ -3,7 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { StreakService } from "../../services/streak-service";
 import { Streak } from "../../model/streak";
 
-// Angular Material Imports - Added MatCardModule and MatMenuModule
+// Angular Material Imports
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import {NgClass} from "@angular/common"; // Corrected from MatCheckbox
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-streaks',
@@ -85,7 +85,7 @@ export class StreaksComponent implements OnInit {
 
     const updatedStreak = {
       ...streak,
-      completed: isNowCompleted,
+      completedToday: isNowCompleted,
       currentStreak: newStreakCount,
       longestStreak: newLongestStreak,
     };

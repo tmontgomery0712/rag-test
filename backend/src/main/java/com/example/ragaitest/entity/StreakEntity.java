@@ -1,26 +1,27 @@
 package com.example.ragaitest.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
+
 @Setter
+@Getter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(NON_DEFAULT)
 @Entity
 @Table(name = "STREAK")
-public class StreakEntity {
+public class StreakEntity extends AuditableEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GENERATED_KEYS")
-    @SequenceGenerator(
-            name = "SEQ_GENERATED_KEYS",
-            sequenceName = "SEQ_GENERATED_KEYS",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

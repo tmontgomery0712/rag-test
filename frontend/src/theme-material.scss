@@ -1,0 +1,71 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define custom green palette using your brand color
+$streak-green-palette: (
+  50: #f1f8e9,
+  100: #dcedc8,
+  200: #c5e1a5,
+  300: #aed581,
+  400: #9ccc65,
+  500: #6DB33F,
+  600: #689f38,
+  700: #558b2f,
+  800: #33691e,
+  900: #1b5e20,
+  A100: #ccff90,
+  A200: #b2ff59,
+  A400: #76ff03,
+  A700: #64dd17,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  )
+);
+
+// Create the theme objects
+$streak-primary: mat.define-palette($streak-green-palette, 500);
+$streak-accent: mat.define-palette($streak-green-palette, A200, A100, A400);
+$streak-warn: mat.define-palette(mat.$red-palette);
+
+// Define dark and light themes
+$streak-dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $streak-primary,
+    accent: $streak-accent,
+    warn: $streak-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+$streak-light-theme: mat.define-light-theme((
+  color: (
+    primary: $streak-primary,
+    accent: $streak-accent,
+    warn: $streak-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Apply dark theme by default (will be overridden by ThemeService)
+@include mat.all-component-themes($streak-dark-theme);
+
+// Light theme - applied when data-theme="light"
+[data-theme="light"] {
+  @include mat.all-component-colors($streak-light-theme);
+}

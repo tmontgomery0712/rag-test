@@ -358,3 +358,7 @@ $RECYCLE.BIN/
 *.flv
 *.mov
 *.wmv
+
+# SQLite databases
+*.db
+streaks.db
