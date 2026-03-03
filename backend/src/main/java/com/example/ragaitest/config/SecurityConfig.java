@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
                 .requestMatchers("/health").permitAll()
-                .requestMatchers("/", "/index.html").permitAll()
+                .requestMatchers("/", "/index.html", "/api/", "/api/index.html").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
