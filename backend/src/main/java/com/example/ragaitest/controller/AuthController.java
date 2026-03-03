@@ -61,6 +61,7 @@ public class AuthController {
                 .loginAttempts(0)
                 .build();
 
+        user.getPreferences().setUser(user);
         userRepository.save(user);
         log.info("Registered new user: {}", user.getUsername());
 
