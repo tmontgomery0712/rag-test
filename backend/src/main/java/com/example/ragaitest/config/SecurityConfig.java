@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                 .requestMatchers("/api/health").permitAll()
-                .requestMatchers("/", "/index.html").permitAll()
+                .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/assets/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
