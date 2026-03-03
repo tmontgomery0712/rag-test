@@ -33,11 +33,11 @@ public class SpaWebFilter implements Filter {
     }
 
     private boolean isApiRequest(String path) {
-        return path.startsWith("/auth/") ||
-               path.startsWith("/user/") ||
-               path.startsWith("/streaks") ||
-               path.equals("/register") ||
-               path.equals("/health") ||
-               path.startsWith("/error");
+        return path.startsWith("/api/auth/") ||
+               path.startsWith("/api/user/") ||
+               path.startsWith("/api/streaks") ||
+               path.equals("/api/register") ||
+               path.equals("/api/health") ||
+               path.startsWith("/api/error");
     }
 }

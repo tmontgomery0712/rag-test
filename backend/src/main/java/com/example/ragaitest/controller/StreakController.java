@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/streaks")
+@RequestMapping("/api/streaks")
 public class StreakController {
     private final StreakService streakService;
 
