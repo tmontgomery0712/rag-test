@@ -7,7 +7,7 @@
   @if (streak(); as s) {
     <div class="flex items-center justify-between mb-6">
       <h1 class="page-title text-3xl font-bold flex items-center gap-3 m-0">
-        {{ s.name }}
+        <span class="text-[var(--color-primary)]">{{ s.name }}</span>
         <span class="flex items-center gap-1 text-[var(--color-warning)] bg-[var(--color-warning)]/10 px-3 py-1 rounded-full text-xl">
           <mat-icon>local_fire_department</mat-icon>
           {{ s.currentStreak }}
@@ -27,15 +27,12 @@
         </mat-form-field>
       </div>
 
-      @if (heatmapData(); as heatmap) {
+        @if (heatmapData(); as heatmap) {
 
-        <div class="flex items-center gap-4 mb-6">
-          <span class="text-[var(--color-text-secondary)] text-lg">
-            <strong class="text-[var(--color-text)]">{{ heatmap.completedDays }} / {{ heatmap.totalDays }}</strong> days completed
-          </span>
-
-          <span class="percentage-badge" [class.high-score]="heatmap.completionPercentage >= 80">
-            {{ heatmap.completionPercentage }}% Completion Rate
+        <div class="stats-row mb-6">
+          <span class="stats-text">
+            <strong class="text-[var(--color-text)]">{{ heatmap.completedDays }}</strong>/{{ heatmap.totalDays }} days -
+            <strong class="text-[var(--color-primary)]">{{ heatmap.completionPercentage }}% Completion Rate</strong>
           </span>
         </div>
 

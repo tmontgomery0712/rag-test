@@ -30,20 +30,18 @@
   width: 160px;
 }
 
-/* Grouped Stats Badge */
-.percentage-badge {
-  font-size: 0.85rem;
-  font-weight: bold;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
+/* Simplified stats row */
+.stats-row {
+  display: flex;
+  align-items: center;
+}
 
-  &.high-score {
-    color: var(--color-success);
-    border-color: var(--color-success);
-    background-color: rgba(102, 187, 106, 0.1);
+.stats-text {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  
+  strong {
+    font-weight: 600;
   }
 }
 
@@ -151,11 +149,15 @@
     font-size: 13px;
   }
 
-  /* Makes the scrollable area span the full width of the screen inside the card */
+  /* Mobile-friendly scroll container */
   .heatmap-container {
-    width: calc(100% + 3rem); /* Compensates for the 1.5rem padding on both sides of the card */
-    margin-left: -1.5rem;
-    padding-left: 1.5rem; /* Keeps the starting text aligned with the title */
+    margin: 0 -1.5rem;
+    padding: 0 1.5rem 12px 1.5rem;
+    width: auto;
+    /* Ensure the content can actually scroll */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   .month-labels {
