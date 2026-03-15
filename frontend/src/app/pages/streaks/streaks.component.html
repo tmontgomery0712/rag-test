@@ -1,9 +1,8 @@
 <div class="page-container">
-  <h1 class="page-title">My Streaks</h1>
 
   <!-- Input for new streak -->
   <mat-form-field class="w-full mb-4">
-    <mat-label>New Streak Name</mat-label>
+    <mat-label>Start A New Streak</mat-label>
     <input matInput [(ngModel)]="newStreakName" (keyup.enter)="addStreak()">
     <button mat-icon-button matSuffix (click)="addStreak()" [disabled]="!newStreakName">
       <mat-icon>add</mat-icon>

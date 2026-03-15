@@ -24,9 +24,9 @@ import { ThemeService } from '../../services/theme.service';
       <span class="navbar-title">
         <a routerLink="/streaks" class="title-link" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Streaks</a>
       </span>
-      
+
       <span class="spacer"></span>
-      
+
       <!-- Desktop buttons -->
       <div class="desktop-actions">
         <button mat-button routerLink="/streaks" class="nav-button" routerLinkActive="active-link">
@@ -42,12 +42,12 @@ import { ThemeService } from '../../services/theme.service';
           Logout
         </button>
       </div>
-      
+
       <!-- Mobile hamburger menu -->
       <button mat-icon-button [matMenuTriggerFor]="menu" class="mobile-menu-button">
         <mat-icon>menu</mat-icon>
       </button>
-      
+
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/streaks">
           <mat-icon>local_fire_department</mat-icon>
@@ -78,12 +78,12 @@ import { ThemeService } from '../../services/theme.service';
       padding: 0 1rem;
       height: 64px;
     }
-    
+
     .navbar-title {
       font-size: 1.25rem;
       font-weight: 500;
     }
-    
+
     .title-link {
       color: var(--color-text);
       text-decoration: none;
@@ -91,21 +91,25 @@ import { ThemeService } from '../../services/theme.service';
       border-radius: 4px;
       transition: all 0.2s ease;
     }
-    
+
+    .title-link.active-link {
+      color: var(--color-primary) !important;
+    }
+
     .title-link:hover {
       color: var(--color-primary);
     }
-    
+
     .spacer {
       flex: 1;
     }
-    
+
     .desktop-actions {
       display: flex;
       align-items: center;
       gap: 0.25rem;
     }
-    
+
     .nav-button {
       color: var(--color-text);
       display: flex;
@@ -113,33 +117,33 @@ import { ThemeService } from '../../services/theme.service';
       gap: 0.25rem;
       transition: all 0.2s ease;
     }
-    
+
     .nav-button mat-icon {
       font-size: 1.25rem;
       width: 1.25rem;
       height: 1.25rem;
     }
-    
+
     .nav-button.active-link {
       color: var(--color-primary) !important;
       background-color: var(--color-surface-hover);
       border-radius: 4px;
     }
-    
+
     .logout-button:hover {
       color: var(--color-error);
     }
-    
+
     .mobile-menu-button {
       display: none;
       color: var(--color-text);
     }
-    
+
     @media (max-width: 768px) {
       .desktop-actions {
         display: none;
       }
-      
+
       .mobile-menu-button {
         display: flex;
       }
@@ -149,7 +153,7 @@ import { ThemeService } from '../../services/theme.service';
 export class NavbarComponent {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
-  
+
   logout(): void {
     this.authService.logout();
   }

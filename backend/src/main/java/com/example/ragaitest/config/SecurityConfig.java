@@ -33,14 +33,13 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                .requestMatchers("/api/health").permitAll()
-                .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/assets/**").permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers("/api/auth/**", "/api/health").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                    .requestMatchers("/api/**").authenticated()
+                    .anyRequest().permitAll()
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
