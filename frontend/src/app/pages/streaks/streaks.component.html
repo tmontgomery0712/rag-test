@@ -11,11 +11,12 @@
 
   <div class="w-full">
     @for (streak of streaks(); track streak.id) {
-      <mat-card class="w-full mb-4 streak-card">
+      <mat-card class="w-full mb-4 streak-card cursor-pointer" (click)="goToDetail(streak.id)">
         <mat-card-content class="p-4">
           <div class="flex items-center gap-4">
             <mat-checkbox
                   [checked]="streak.completedToday"
+                  (click)="$event.stopPropagation()"
                   (change)="toggleCompletion(streak)"
                   [aria-label]="'Complete ' + streak.name + ' for the day'"
                   color="primary">
@@ -52,7 +53,7 @@
                 <mat-icon>cancel</mat-icon>
               </button>
             } @else {
-              <button mat-icon-button [matMenuTriggerFor]="menu">
+              <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">

@@ -1,5 +1,6 @@
 package com.example.ragaitest.controller;
 
+import com.example.ragaitest.dto.HeatmapResponse;
 import com.example.ragaitest.dto.StreakDto;
 import com.example.ragaitest.dto.StreakDtoProjection;
 import com.example.ragaitest.security.Principal;
@@ -50,5 +51,13 @@ public class StreakController {
     public ResponseEntity<StreakDto> updateStreak(@RequestBody @Valid StreakDto streakDto, @AuthenticationPrincipal Principal principal) {
         streakService.updateStreak(streakDto, principal.getUsername());
         return ResponseEntity.ok(streakDto);
+    }
+
+    @GetMapping("/{id}/heatmap")
+    public ResponseEntity<HeatmapResponse> getHeatmap(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "90") int days) {
+
+        return ResponseEntity.ok(streakService.getHeatmap(id, days));
     }
 }

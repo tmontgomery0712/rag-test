@@ -13,4 +13,10 @@ public interface StreakCompletionRepository extends JpaRepository<StreakCompleti
     Optional<StreakCompletionEntity> findByStreakIdAndReferenceDate(Long streakId, LocalDate referenceDate);
 
     List<StreakCompletionEntity> findByStreakIdInAndCompletionDateIsNotNullOrderByReferenceDateAsc(List<Long> streakIds);
+
+    List<StreakCompletionEntity> findByStreakIdAndReferenceDateBetweenAndCompletionDateIsNotNull(
+            Long streakId,
+            LocalDate startDate,
+            LocalDate endDate
+    );
 }

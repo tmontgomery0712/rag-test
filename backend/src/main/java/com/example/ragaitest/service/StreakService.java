@@ -1,5 +1,7 @@
 package com.example.ragaitest.service;
 
+import com.example.ragaitest.dto.HeatmapItem;
+import com.example.ragaitest.dto.HeatmapResponse;
 import com.example.ragaitest.dto.StreakDto;
 import com.example.ragaitest.dto.StreakDtoProjection;
 import com.example.ragaitest.entity.StreakCompletionEntity;
@@ -14,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +33,8 @@ public class StreakService {
             return Collections.emptyList();
         }
 
-        // 2. Fetch all completions for these streaks, ordered by reference date
         List<Long> streakIds = userStreaks.stream().map(StreakEntity::getId).toList();
 
-        // Note: You will need this method in your StreakCompletionRepository:
-        // List<StreakCompletionEntity> findByStreakIdInAndCompletionDateIsNotNullOrderByReferenceDateAsc(List<Long> streakIds);
         List<StreakCompletionEntity> validCompletions = streakCompletionRepository
                 .findByStreakIdInAndCompletionDateIsNotNullOrderByReferenceDateAsc(streakIds);
 
@@ -167,5 +163,49 @@ public class StreakService {
                     streakCompletionRepository.save(completionEntity);
                 }
         );
+    }
+
+    public HeatmapResponse getHeatmap(Long streakId, int days) {
+        // 1. Calculate boundaries
+        LocalDate today = LocalDate.now();
+        // Subtracting (days - 1) ensures today is included in the total count
+        LocalDate startDate = today.minusDays(days - 1);
+
+        // 2. Fetch completed entities
+        List<StreakCompletionEntity> completedEntities = streakCompletionRepository
+                .findByStreakIdAndReferenceDateBetweenAndCompletionDateIsNotNull(streakId, startDate, today);
+
+        // 3. Extract dates into a fast HashSet for O(1) lookups
+        Set<LocalDate> completedDates = completedEntities.stream()
+                .map(StreakCompletionEntity::getReferenceDate)
+                .collect(Collectors.toSet());
+
+        // 4. Build the grid skeleton
+        List<HeatmapItem> grid = new ArrayList<>();
+        int completedCount = 0;
+
+        LocalDate tomorrow = today.plusDays(1);
+        // Loop day-by-day from the start date up to (and including) today
+        for (LocalDate date = startDate; date.isBefore(tomorrow); date = date.plusDays(1)) {
+
+            // Check if this specific day exists in our database results
+            boolean isCompleted = completedDates.contains(date);
+
+            grid.add(new HeatmapItem(date, isCompleted));
+
+            if (isCompleted) {
+                completedCount++;
+            }
+        }
+
+        // 5. Calculate stats safely
+        int totalDays = grid.size(); // This will perfectly match your 'days' parameter
+
+        // Cast to double to prevent Java from doing integer division (which drops decimals)
+        double percentage = totalDays == 0 ? 0.0 :
+                Math.round(((double) completedCount / totalDays) * 1000.0) / 10.0;
+
+        // 6. Return the formatted response
+        return new HeatmapResponse(grid, percentage, totalDays, completedCount);
     }
 }

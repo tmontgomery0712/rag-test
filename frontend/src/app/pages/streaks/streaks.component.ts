@@ -2,6 +2,7 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { StreakService } from "../../services/streak-service";
 import { Streak } from "../../model/streak";
+import { Router } from '@angular/router';
 
 // Angular Material Imports
 import { MatCardModule } from '@angular/material/card';
@@ -35,6 +36,7 @@ import {NgClass} from "@angular/common";
 export class StreaksComponent implements OnInit {
 
   private streakService = inject(StreakService);
+  private router = inject(Router);
   streaks = this.streakService.streaks;
   newStreakName = '';
 
@@ -104,5 +106,9 @@ export class StreaksComponent implements OnInit {
 
   cancelEdit(): void {
     this.editingStreak.set(null);
+  }
+
+  goToDetail(id: number): void {
+    this.router.navigate(['/streaks', id]);
   }
 }

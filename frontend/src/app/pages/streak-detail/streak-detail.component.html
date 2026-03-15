@@ -1,0 +1,85 @@
+<div class="page-container">
+
+  <button mat-button (click)="goBack()" class="mb-6 text-secondary hover:text-white transition-colors">
+    <mat-icon>arrow_back</mat-icon> Back to Streaks
+  </button>
+
+  @if (streak(); as s) {
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="page-title text-3xl font-bold flex items-center gap-3 m-0">
+        {{ s.name }}
+        <span class="flex items-center gap-1 text-[var(--color-warning)] bg-[var(--color-warning)]/10 px-3 py-1 rounded-full text-xl">
+          <mat-icon>local_fire_department</mat-icon>
+          {{ s.currentStreak }}
+        </span>
+      </h1>
+    </div>
+
+    <div class="card">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold m-0 text-[var(--color-text)]">Activity Heatmap</h2>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="timeframe-selector">
+          <mat-select [ngModel]="selectedDays()" (ngModelChange)="onDaysChanged($event)">
+            <mat-option [value]="30">Last 30 Days</mat-option>
+            <mat-option [value]="90">Last 90 Days</mat-option>
+            <mat-option [value]="365">Last Year</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (heatmapData(); as heatmap) {
+
+        <div class="flex items-center gap-4 mb-6">
+          <span class="text-[var(--color-text-secondary)] text-lg">
+            <strong class="text-[var(--color-text)]">{{ heatmap.completedDays }} / {{ heatmap.totalDays }}</strong> days completed
+          </span>
+
+          <span class="percentage-badge" [class.high-score]="heatmap.completionPercentage >= 80">
+            {{ heatmap.completionPercentage }}% Completion Rate
+          </span>
+        </div>
+
+        <div class="heatmap-container">
+          <div class="heatmap-wrapper">
+            <div class="month-labels">
+              <span
+                *ngFor="let label of monthLabels()"
+                class="month-label"
+                [style.--week-idx]="label.weekIndex">
+                {{ label.month }}
+              </span>
+            </div>
+
+            <div class="heatmap-body">
+              <div class="day-labels">
+                <div class="day-label">Sun</div>
+                <div class="day-label">Mon</div>
+                <div class="day-label">Tue</div>
+                <div class="day-label">Wed</div>
+                <div class="day-label">Thu</div>
+                <div class="day-label">Fri</div>
+                <div class="day-label">Sat</div>
+              </div>
+
+              <div class="heatmap-squares">
+                @for (item of heatmap.grid; track item.date; let i = $index) {
+                  <div
+                    class="heatmap-square"
+                    [class.completed]="item.completed"
+                    [style.grid-row]="i === 0 ? getStartingRow() : 'auto'"
+                    [matTooltip]="item.date + (item.completed ? ' (Completed)' : ' (Missed)')"
+                    matTooltipPosition="above">
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="p-8 text-center text-secondary">Loading heatmap...</div>
+      }
+    </div>
+  } @else {
+    <div class="p-8 text-center text-secondary">Loading streak details...</div>
+  }
+</div>

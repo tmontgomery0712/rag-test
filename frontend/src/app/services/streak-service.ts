@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { tap, catchError, throwError } from "rxjs";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Streak } from "../model/streak";
+import { HeatmapResponse } from '../model/heatmap';
 import { environment } from "../../environments/environment";
 
 @Injectable({
@@ -102,5 +103,14 @@ export class StreakService {
         return throwError(() => err);
       })
     ).subscribe();
+  }
+
+  // In streak.service.ts
+  getStreakById(id: number): Streak | undefined {
+    return this.streaks().find(streak => streak.id === id);
+  }
+
+  getStreakHeatmap(id: number, days: number = 365) {
+    return this.http.get<HeatmapResponse>(`${this.baseLocation}/${id}/heatmap?days=${days}`);
   }
 }

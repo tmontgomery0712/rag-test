@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { StreaksComponent } from './pages/streaks/streaks.component';
+import { StreakDetailComponent } from './pages/streak-detail/streak-detail.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
@@ -38,7 +39,13 @@ export const routes: Routes = [
     path: 'streaks',
     component: StreaksComponent,
     canActivate: [authGuard],
-    title: 'My Streaks'
+    title: 'Streaks'
+  },
+  {
+    path: 'streaks/:id',
+    component: StreakDetailComponent,
+    canActivate: [authGuard],
+    title: 'Streak Details'
   },
   {
     path: '',
