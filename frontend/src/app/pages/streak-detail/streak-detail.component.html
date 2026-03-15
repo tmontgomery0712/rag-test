@@ -66,9 +66,7 @@
                   <div
                     class="heatmap-square"
                     [class.completed]="item.completed"
-                    [style.grid-row]="i === 0 ? getStartingRow() : 'auto'"
-                    [matTooltip]="item.date + (item.completed ? ' (Completed)' : ' (Missed)')"
-                    matTooltipPosition="above">
+                    [style.grid-row]="i === 0 ? getStartingRow() : 'auto'">
                   </div>
                 }
               </div>
